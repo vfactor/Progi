@@ -1,0 +1,26 @@
+﻿@page "/budget"
+@inject HttpClient Http
+
+<PageTitle>Calcul pouvoir d'achat'</PageTitle>
+
+<h1>Pouvoir Achat</h1>
+<br />
+<br />
+
+<label>Entrer le montant total </label>
+<input type="number" @bind="_total"/>
+<button class="btn btn-primary" @onclick="GetAmount">Go</button>
+<br />
+<label>Pouvoir Achat </label>
+@(_netAmount > 0 ? _netAmount : 0)
+
+@code {
+    private double _total;
+    private double _netAmount;
+
+    private async void GetAmount()
+    {
+        _netAmount = await Http.GetFromJsonAsync<double>($"https://localhost:5000/budget/reverse/{_total}");
+        StateHasChanged();
+    }
+}
